@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="ClaudeForVS.4557cb84-f0b9-46ef-9dee-4736aac31ef9" Version="1.0.0" Language="en-US" Publisher="Radoslaw Zawartko" />
+    <DisplayName>Claude for Visual Studio</DisplayName>
+    <Description xml:space="preserve">Use your Claude subscription (Pro / Max / Team) inside Visual Studio through the Claude Code CLI: generate git commit messages, chat about your code, explain or review selections, and see your 5-hour / weekly usage.</Description>
+    <Icon>Resources\icon.png</Icon>
+    <Tags>claude, ai, git, commit message, anthropic</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,19.0)">
+      <ProductArchitecture>arm64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

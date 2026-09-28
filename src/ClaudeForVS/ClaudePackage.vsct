@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Include href="KnownImageIds.vsct" />
+
+  <Commands package="guidClaudePackage">
+
+    <Menus>
+      <Menu guid="guidClaudeCmdSet" id="ClaudeSubMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidClaudeCmdSet" id="ToolsMenuGroup" />
+        <Strings>
+          <ButtonText>Claude</ButtonText>
+        </Strings>
+      </Menu>
+      <Menu guid="guidClaudeCmdSet" id="EditorSubMenu" priority="0x0100" type="Menu">
+        <Parent guid="guidClaudeCmdSet" id="EditorContextGroup" />
+        <Strings>
+          <ButtonText>Claude</ButtonText>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="guidClaudeCmdSet" id="ToolsMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+      <Group guid="guidClaudeCmdSet" id="ClaudeSubMenuGroup" priority="0x0100">
+        <Parent guid="guidClaudeCmdSet" id="ClaudeSubMenu" />
+      </Group>
+      <Group guid="guidClaudeCmdSet" id="EditorContextGroup" priority="0x0100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+      </Group>
+      <Group guid="guidClaudeCmdSet" id="EditorSubMenuGroup" priority="0x0100">
+        <Parent guid="guidClaudeCmdSet" id="EditorSubMenu" />
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidClaudeCmdSet" id="cmdGenerateCommitMessage" priority="0x0100" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="ClaudeSubMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Commit" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Generate &amp;Commit Message...</ButtonText>
+          <CommandName>Claude.GenerateCommitMessage</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidClaudeCmdSet" id="cmdOpenChat" priority="0x0200" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="ClaudeSubMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Comment" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Open Claude &amp;Chat</ButtonText>
+          <CommandName>Claude.OpenChat</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidClaudeCmdSet" id="cmdRefreshUsage" priority="0x0300" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="ClaudeSubMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Refresh" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <Strings>
+          <ButtonText>Check Subscription &amp;Usage</ButtonText>
+          <CommandName>Claude.CheckUsage</CommandName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidClaudeCmdSet" id="cmdExplainSelection" priority="0x0100" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="EditorSubMenuGroup" />
+        <Strings>
+          <ButtonText>Explain Selection</ButtonText>
+          <CommandName>Claude.ExplainSelection</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidClaudeCmdSet" id="cmdReviewSelection" priority="0x0200" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="EditorSubMenuGroup" />
+        <Strings>
+          <ButtonText>Review Selection</ButtonText>
+          <CommandName>Claude.ReviewSelection</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidClaudeCmdSet" id="cmdAskAboutSelection" priority="0x0300" type="Button">
+        <Parent guid="guidClaudeCmdSet" id="EditorSubMenuGroup" />
+        <Strings>
+          <ButtonText>Ask About Selection...</ButtonText>
+          <CommandName>Claude.AskAboutSelection</CommandName>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidClaudePackage" value="{9ac50cca-4a81-45b1-8000-0e5f84c72c59}" />
+    <GuidSymbol name="guidClaudeCmdSet" value="{d0fd17ea-46e8-4f7e-a585-baba894a097c}">
+      <IDSymbol name="ToolsMenuGroup" value="0x1000" />
+      <IDSymbol name="ClaudeSubMenu" value="0x1001" />
+      <IDSymbol name="ClaudeSubMenuGroup" value="0x1002" />
+      <IDSymbol name="EditorContextGroup" value="0x1003" />
+      <IDSymbol name="EditorSubMenu" value="0x1004" />
+      <IDSymbol name="EditorSubMenuGroup" value="0x1005" />
+      <IDSymbol name="cmdGenerateCommitMessage" value="0x0100" />
+      <IDSymbol name="cmdOpenChat" value="0x0101" />
+      <IDSymbol name="cmdRefreshUsage" value="0x0102" />
+      <IDSymbol name="cmdExplainSelection" value="0x0200" />
+      <IDSymbol name="cmdReviewSelection" value="0x0201" />
+      <IDSymbol name="cmdAskAboutSelection" value="0x0202" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
