@@ -78,6 +78,19 @@ namespace ClaudeForVS.Services
             };
         }
 
+        /// <summary>Replaces the selection (or inserts at the caret) in the active editor. Returns false if no text editor is active.</summary>
+        public static bool InsertIntoActiveDocument(string text)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (!(Dte?.ActiveDocument?.Selection is TextSelection selection)) return false;
+            var ownsUndo = !Dte.UndoContext.IsOpen;
+            if (ownsUndo) Dte.UndoContext.Open("Insert code from Claude");
+            try { selection.Insert(text, (int)vsInsertFlags.vsInsertFlagsContainNewText); }
+            finally { if (ownsUndo) Dte.UndoContext.Close(); }
+            Dte.ActiveDocument.Activate();
+            return true;
+        }
+
         public static void SetStatus(string text)
         {
             ThreadHelper.ThrowIfNotOnUIThread();

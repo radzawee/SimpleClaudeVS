@@ -1,0 +1,172 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:platformUI="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+                    xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0">
+
+    <!--
+        Translucent overlays (#xx808080) read well on both light and dark themes,
+        so only the accent is a fixed color; everything else follows the VS theme.
+    -->
+    <SolidColorBrush x:Key="Claude.Accent" Color="#D97757" />
+    <SolidColorBrush x:Key="Claude.AccentHover" Color="#E3896C" />
+    <SolidColorBrush x:Key="Claude.AccentSoft" Color="#2ED97757" />
+    <SolidColorBrush x:Key="Claude.Overlay" Color="#12808080" />
+    <SolidColorBrush x:Key="Claude.OverlayHover" Color="#26808080" />
+    <SolidColorBrush x:Key="Claude.OverlayStrong" Color="#1C808080" />
+    <SolidColorBrush x:Key="Claude.Hairline" Color="#38808080" />
+    <SolidColorBrush x:Key="Claude.ErrorSoft" Color="#26E5484D" />
+    <SolidColorBrush x:Key="Claude.Error" Color="#E5484D" />
+    <SolidColorBrush x:Key="Claude.OnAccent" Color="White" />
+
+    <!-- Eight-ray starburst used for the Claude avatar. -->
+    <Geometry x:Key="Claude.Burst">M 5,0 L 5,10 M 0,5 L 10,5 M 1.46,1.46 L 8.54,8.54 M 8.54,1.46 L 1.46,8.54</Geometry>
+
+    <FontFamily x:Key="Claude.IconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+    <FontFamily x:Key="Claude.MonoFont">Cascadia Mono, Cascadia Code, Consolas, Courier New</FontFamily>
+
+    <!-- Icon-only button: flat, rounded hover. -->
+    <Style x:Key="Claude.IconButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" />
+        <Setter Property="FontFamily" Value="{StaticResource Claude.IconFont}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Padding" Value="7" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.OverlayHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.Hairline}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Small text button (Copy, Insert) used inside messages and code blocks. -->
+    <Style x:Key="Claude.GhostButton" TargetType="Button" BasedOn="{StaticResource Claude.IconButton}">
+        <Setter Property="FontFamily" Value="{DynamicResource {x:Static vsshell:VsFonts.EnvironmentFontFamilyKey}}" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Padding" Value="7,3" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.SystemGrayTextBrushKey}}" />
+    </Style>
+
+    <!-- Primary (send) button. -->
+    <Style x:Key="Claude.AccentButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource Claude.Accent}" />
+        <Setter Property="Foreground" Value="{StaticResource Claude.OnAccent}" />
+        <Setter Property="FontFamily" Value="{StaticResource Claude.IconFont}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.AccentHover}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.35" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Rounded suggestion chip in the empty state. -->
+    <Style x:Key="Claude.ChipButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource Claude.Overlay}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Claude.Hairline}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" />
+        <Setter Property="Padding" Value="12,7" />
+        <Setter Property="Margin" Value="0,0,8,8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.OverlayHover}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Claude.Accent}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Toggle chip (e.g. "Active file"). -->
+    <Style x:Key="Claude.ToggleChip" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource Claude.Hairline}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.SystemGrayTextBrushKey}}" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Padding" Value="8,3" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.Overlay}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Claude.AccentSoft}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Claude.Accent}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Chrome-less TextBox: used for the composer and for selectable message text. -->
+    <Style x:Key="Claude.BareTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource {x:Static platformUI:EnvironmentColors.ToolWindowTextBrushKey}}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource Claude.Accent}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <ScrollViewer x:Name="PART_ContentHost" Background="{TemplateBinding Background}"
+                                  Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

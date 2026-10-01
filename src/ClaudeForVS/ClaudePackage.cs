@@ -13,7 +13,7 @@ using Task = System.Threading.Tasks.Task;
 namespace ClaudeForVS
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration("Claude for Visual Studio", "Use your Claude subscription in Visual Studio via the Claude Code CLI.", "1.0.0")]
+    [InstalledProductRegistration("Claude for Visual Studio", "Use your Claude subscription in Visual Studio via the Claude Code CLI.", "1.1.0")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(ChatToolWindow), Style = VsDockStyle.Tabbed, Window = ToolWindowGuids.SolutionExplorer, Orientation = ToolWindowOrientation.Right)]
     [ProvideOptionPage(typeof(GeneralOptions), "Claude", "General", 0, 0, true)]

@@ -30,6 +30,7 @@ namespace ClaudeForVS.Services
         public string SessionId { get; set; }
         public bool IsError { get; set; }
         public double? CostUsd { get; set; }
+        public long? DurationMs { get; set; }
     }
 
     /// <summary>Subscription rate-limit windows as reported by the CLI's rate_limit_event.</summary>
@@ -75,7 +76,8 @@ namespace ClaudeForVS.Services
         public static UsageSnapshot LastUsage { get; private set; }
         public static event Action<UsageSnapshot> UsageUpdated;
 
-        public static async Task<ClaudeResult> RunAsync(ClaudeRequest request, Action<string> onTextDelta, CancellationToken cancellationToken)
+        /// <param name="onActivity">Called with a short description whenever Claude uses a tool (e.g. "Read · Program.cs").</param>
+        public static async Task<ClaudeResult> RunAsync(ClaudeRequest request, Action<string> onTextDelta, CancellationToken cancellationToken, Action<string> onActivity = null)
         {
             var options = ClaudePackage.Options;
             var exe = ResolveExecutable(options.ClaudePath);
@@ -188,6 +190,13 @@ namespace ClaudeForVS.Services
                                     onTextDelta?.Invoke("\n\n");
                                 }
                                 break;
+                            case "assistant":
+                                if (onActivity != null && msg["message"]?["content"] is JArray content)
+                                {
+                                    foreach (var block in content.Where(b => (string)b["type"] == "tool_use"))
+                                        onActivity(DescribeToolUse((string)block["name"], block["input"]));
+                                }
+                                break;
                             case "rate_limit_event":
                                 PublishUsage(msg["rate_limit_info"]);
                                 break;
@@ -195,6 +204,7 @@ namespace ClaudeForVS.Services
                                 result.SessionId = (string)msg["session_id"] ?? result.SessionId;
                                 result.IsError = (bool?)msg["is_error"] ?? false;
                                 result.CostUsd = (double?)msg["total_cost_usd"];
+                                result.DurationMs = (long?)msg["duration_ms"];
                                 finalResult = (string)msg["result"];
                                 break;
                         }
@@ -237,6 +247,18 @@ namespace ClaudeForVS.Services
 
             LastUsage = snapshot;
             UsageUpdated?.Invoke(snapshot);
+        }
+
+        private static string DescribeToolUse(string name, JToken input)
+        {
+            var target = (string)input?["file_path"] ?? (string)input?["pattern"] ?? (string)input?["path"] ?? (string)input?["command"];
+            if (string.IsNullOrEmpty(target)) return name;
+            if ((string)input?["file_path"] != null)
+            {
+                try { target = Path.GetFileName(target); } catch (ArgumentException) { }
+            }
+            if (target.Length > 60) target = target.Substring(0, 57) + "…";
+            return $"{name} · {target}";
         }
 
         private static DateTimeOffset? FromUnix(long? seconds) =>
